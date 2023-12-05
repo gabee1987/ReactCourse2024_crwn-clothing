@@ -1,5 +1,14 @@
 import Directory from "../../components/directory-component/directory.component";
 
+const Navigation = () => {
+  return (
+    <div>
+      <div>
+        <h1>I am the navigation bar</h1>
+      </div>
+    </div>
+  );
+};
 const Home = () => {
   const categories = [
     {
