@@ -34,7 +34,7 @@ const SignUpForm = () => {
       return;
     }
 
-    // CReate the user in firebase
+    // Create the user in firebase
     try {
       const { user } = await createAuthUserWithEmailAndPassword(
         email,
@@ -45,7 +45,7 @@ const SignUpForm = () => {
       await createUserDocumentFromAuth(user, { displayName });
 
       // Reset the form fields
-      setFormFields();
+      resetFormFields();
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         alert("Cannot create user, email already in use!");
@@ -78,7 +78,7 @@ const SignUpForm = () => {
   return (
     <div className="sign-up-container">
       <h2>Dont have an account?</h2>
-      <span>Sign up with you email and password</span>
+      <span>Sign up with your email and password</span>
       <form onSubmit={handleSubmit}>
         <FormInput
           label="Display Name"
@@ -105,12 +105,12 @@ const SignUpForm = () => {
         <FormInput
           label="Password"
           inputOptions={{
-            type: "text",
+            type: "password",
             required: true,
             onChange: handleChange,
             name: "password",
             value: password,
-            pattern: "(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
+            pattern: "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
             title:
               "Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters",
           }}
@@ -119,12 +119,12 @@ const SignUpForm = () => {
         <FormInput
           label="Confirm Password"
           inputOptions={{
-            type: "text",
+            type: "password",
             required: true,
             onChange: handleChange,
             name: "confirmPassword",
             value: confirmPassword,
-            pattern: "(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
+            pattern: "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
             title:
               "Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters",
           }}
