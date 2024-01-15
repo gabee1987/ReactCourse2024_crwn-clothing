@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import FormInput from "../form-input/form-input.component";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
@@ -75,44 +76,54 @@ const SignUpForm = () => {
     <div>
       <h1>Sign up with you email and password</h1>
       <form onSubmit={handleSubmit}>
-        <label>Display Name</label>
-        <input
-          type="text"
-          required
-          onChange={handleChange}
-          name="displayName"
-          value={displayName}
+        <FormInput
+          label="Display Name"
+          inputOptions={{
+            type: "text",
+            required: true,
+            onChange: handleChange,
+            name: "displayName",
+            value: displayName,
+          }}
         />
 
-        <label>Email</label>
-        <input
-          type="email"
-          required
-          onChange={handleChange}
-          name="email"
-          value={email}
+        <FormInput
+          label="Email"
+          inputOptions={{
+            type: "text",
+            required: true,
+            onChange: handleChange,
+            name: "email",
+            value: email,
+          }}
         />
 
-        <label>Password</label>
-        <input
-          type="password"
-          required
-          onChange={handleChange}
-          name="password"
-          value={password}
-          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-          title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters"
+        <FormInput
+          label="Password"
+          inputOptions={{
+            type: "text",
+            required: true,
+            onChange: handleChange,
+            name: "password",
+            value: password,
+            pattern: "(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
+            title:
+              "Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters",
+          }}
         />
 
-        <label>Confirm Password</label>
-        <input
-          type="password"
-          required
-          onChange={handleChange}
-          name="confirmPassword"
-          value={confirmPassword}
-          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-          title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters"
+        <FormInput
+          label="Confirm Password"
+          inputOptions={{
+            type: "text",
+            required: true,
+            onChange: handleChange,
+            name: "confirmPassword",
+            value: confirmPassword,
+            pattern: "(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
+            title:
+              "Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters",
+          }}
         />
 
         {passwordError && <div style={{ color: "red" }}>{passwordError}</div>}
