@@ -15,35 +15,60 @@ const defaultFormFields = {
 const SignUpForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
+  const [passwordError, setPasswordError] = useState("");
 
-  //   console.log(formFields);
+  const resetFormFields = () => {
+    setFormFields(defaultFormFields);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     // confirm if the passwords matches
     if (password !== confirmPassword) {
-      console.log("passwords are not matching!");
+      alert("Passwords do not match!");
       return;
     }
 
-    // check if we authenticated the user with email & password
-    const { user } = await createAuthUserWithEmailAndPassword(email, password);
-    if (!user) {
-      console.log("error during user creation...");
-      return;
-    }
-    console.log(user);
+    // CReate the user in firebase
+    try {
+      const { user } = await createAuthUserWithEmailAndPassword(
+        email,
+        password
+      );
 
-    // create a user document
-    const userDocRef = await createUserDocumentFromAuth(user);
-    console.log(userDocRef);
+      // create a user document
+      await createUserDocumentFromAuth(user, { displayName });
+
+      // Reset the form fields
+      setFormFields();
+    } catch (error) {
+      if (error.code === "auth/email-already-in-use") {
+        alert("Cannot create user, email already in use!");
+      }
+      console.error("Error during user creation!", error);
+    }
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
     setFormFields({ ...formFields, [name]: value });
+
+    // Realtime password matching error messages
+    if (name === "password" || name === "confirmPassword") {
+      if (
+        name === "password" &&
+        formFields.confirmPassword &&
+        value !== formFields.confirmPassword
+      ) {
+        setPasswordError("Passwords do not match");
+      } else if (name === "confirmPassword" && value !== formFields.password) {
+        setPasswordError("Passwords do not match");
+      } else {
+        setPasswordError(""); // Clear error message when passwords match
+      }
+    }
   };
 
   return (
@@ -75,6 +100,8 @@ const SignUpForm = () => {
           onChange={handleChange}
           name="password"
           value={password}
+          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+          title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters"
         />
 
         <label>Confirm Password</label>
@@ -84,8 +111,11 @@ const SignUpForm = () => {
           onChange={handleChange}
           name="confirmPassword"
           value={confirmPassword}
+          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+          title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters"
         />
 
+        {passwordError && <div style={{ color: "red" }}>{passwordError}</div>}
         <button type="submit">Sign Up</button>
       </form>
     </div>
